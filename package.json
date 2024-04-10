@@ -1,0 +1,14 @@
+{
+  "name": "@indivice/omega-web-driver",
+  "version": "1.0.0",
+  "description": "The official web engine for omegaUI",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Mayukh Chakraborty",
+  "license": "MIT",
+  "dependencies": {
+    "@indivice/omega-lang": "^1.0.1"
+  }
+}
