@@ -30,7 +30,7 @@ export class OmegaWebDriver {
 
                     if ( property[0].startsWith('on') ) {
 
-                        element.addEventListener(property[0], property[1])
+                        element.addEventListener(property[0].replace('on', ''), property[1])
 
                     }
 
@@ -137,11 +137,18 @@ export class OmegaWebDriver {
 
                 return element
 
+            case NativeComponentIndex.Link:
+                element = document.createElement('a')
+
+                this.__handle_component_property(element, component)
+                this.__handle_component_children(element, component)
+
+                return element
+            
             case NativeComponentIndex.Button:
                 element = document.createElement("button")
                 
                 this.__handle_component_property(element, component)
-
                 this.__handle_component_children(element, component)
 
                 return element
@@ -195,7 +202,6 @@ export class OmegaWebDriver {
                 element = document.createElement('select')
 
                 this.__handle_component_property(element, component)
-
                 this.__handle_component_children(element, component)
 
                 return element
@@ -204,7 +210,6 @@ export class OmegaWebDriver {
                 element = document.createElement('option')
 
                 this.__handle_component_property(element, component)
-
                 this.__handle_component_children(element, component)
 
                 return element
