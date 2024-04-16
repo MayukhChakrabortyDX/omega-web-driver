@@ -4,6 +4,9 @@
         "declaration": true,
         "rootDir": "./src",
         "outDir": "./dist",
-        "removeComments": true
+        "removeComments": true,
+        "paths": {
+            "@indivice/*": ["./node_modules/@indivice/*"]
+        }
     }
 }

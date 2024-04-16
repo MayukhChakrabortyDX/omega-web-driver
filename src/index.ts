@@ -1,4 +1,4 @@
-import { Dynamic, OmegaComponent } from "@indivice/omega-lang"
+import { Dynamic, OmegaComponent } from "@indivice/omega-lang/index"
 import { NativeComponentIndex } from "@indivice/omega-lang/type"
 
 //create a secure hash to make sure that
@@ -754,6 +754,14 @@ export class OmegaWebDriver {
                 )
 
                 return text
+
+            case NativeComponentIndex.Icon:
+                element = document.createElement('i')
+
+                this.__handle_component_property(element, component)
+                this.__handle_component_children(element, component)
+
+                return element
 
             case NativeComponentIndex.TextBox:
                 element = document.createElement('p')
