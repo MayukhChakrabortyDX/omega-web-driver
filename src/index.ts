@@ -1,5 +1,5 @@
-import { Dynamic, OmegaComponent } from "../node_modules/@indivice/omega-lang/index"
-import { NativeComponentIndex } from "../node_modules/@indivice/omega-lang/type"
+import { Dynamic, OmegaComponent } from "@indivice/omega-lang"
+import { NativeComponentIndex } from "@indivice/omega-lang/type"
 
 //create a secure hash to make sure that
 //the application components are easily identificable
