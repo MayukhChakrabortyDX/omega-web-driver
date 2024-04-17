@@ -103,19 +103,19 @@ export class OmegaWebDriver {
                             //regions does not support any property tag implicitly. Make sure all the components
                             //are free from any dynamic property construct
 
-                            if ( propertyName == "style" ) {
+                            if (propertyName == "style") {
 
-                                if ( newTree.properties.style != undefined ) {
+                                if (newTree.properties.style != undefined) {
 
                                     Object.assign(node.style, newTree.properties.style)
 
                                 }
 
-                                if ( preTree.properties.style != undefined ) {
+                                if (preTree.properties.style != undefined) {
 
                                     Object.keys(preTree.properties.style).forEach(key => {
 
-                                        if ( newTree.properties.style[key] == undefined ) {
+                                        if (newTree.properties.style[key] == undefined) {
 
                                             node.style.removeProperty(key)
 
@@ -127,9 +127,9 @@ export class OmegaWebDriver {
 
                             } else {
 
-                                if ( preTree.properties[propertyName] !== newTree.properties[propertyName] ) {
+                                if (preTree.properties[propertyName] !== newTree.properties[propertyName]) {
 
-                                    if ( !propertyName.startsWith('on') ) {
+                                    if (!propertyName.startsWith('on')) {
                                         node[propertyName] = newTree.properties[propertyName]
                                         node.setAttribute(propertyName, newTree.properties[propertyName])
                                     } else {
@@ -338,7 +338,7 @@ export class OmegaWebDriver {
 
                                             let track = dynamicProperty.dynamic.callback()
 
-                                            if ( track != "__omega__ignore__property__" ) {
+                                            if (track != "__omega__ignore__property__") {
                                                 element.style[style[0]] = track
                                             }
 
@@ -360,7 +360,7 @@ export class OmegaWebDriver {
 
                                         } else {
 
-                                            if ( style[1] != "__omega__ignore__property__" ) {
+                                            if (style[1] != "__omega__ignore__property__") {
                                                 element.style[style[0]] = style[1]
                                             }
 
@@ -432,7 +432,7 @@ export class OmegaWebDriver {
 
                                             let track = dynamicProperty.dynamic.callback()
 
-                                            if ( track != "__omega__ignore__property__" ) {
+                                            if (track != "__omega__ignore__property__") {
                                                 element.style[style[0]] = track
                                             }
 
@@ -454,7 +454,7 @@ export class OmegaWebDriver {
 
                                         } else {
 
-                                            if ( style[1] != "__omega__ignore__property__" ) {
+                                            if (style[1] != "__omega__ignore__property__") {
                                                 element.style[style[0]] = style[1]
                                             }
 
@@ -468,13 +468,13 @@ export class OmegaWebDriver {
 
                         }
 
-                        if (property[0].startsWith('on')) {
+                        else if (property[0].startsWith('on')) {
 
                             element.addEventListener(property[0].replace('on', ''), property[1])
 
                         }
 
-                        if (property[0] != "child" && property[0] != "children" && !property[0].startsWith('on') && property[0] != "style") {
+                        else if (property[0] != "child" && property[0] != "children" && !property[0].startsWith('on') && property[0] != "style") {
 
                             if (typeof (property[1]) != "string") {
 
@@ -483,7 +483,7 @@ export class OmegaWebDriver {
 
                                 let track = dynamicProperty.dynamic.callback()
 
-                                if ( track != "__omega__ignore__property__" ) {
+                                if (track != "__omega__ignore__property__") {
                                     element[property[0]] = track
                                     element.setAttribute(property[0], track)
                                 }
@@ -496,6 +496,7 @@ export class OmegaWebDriver {
                                         if (newProp !== track) {
 
                                             element[property[0]] = newProp
+                                            element.setAttribute(property[0], newProp)
                                             track = newProp
 
                                         }
@@ -506,12 +507,18 @@ export class OmegaWebDriver {
 
                             } else {
 
-                                if ( property[1] != "__omega__ignore__property__" ) {
+                                if (property[1] != "__omega__ignore__property__") {
                                     element[property[0]] = property[1]
                                     element.setAttribute(property[0], property[1])
                                 }
 
                             }
+
+                        } else if ( property[0] == "reference" ) {
+
+                            //property[1] must be a state
+                            property[1].set( element )
+
                         }
 
                     }

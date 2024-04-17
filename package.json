@@ -1,6 +1,6 @@
 {
   "name": "@indivice/omega-web-driver",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "The official web engine for omegaUI",
   "main": "index.js",
   "scripts": {
