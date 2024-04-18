@@ -472,6 +472,11 @@ export class OmegaWebDriver {
 
                             element.addEventListener(property[0].replace('on', ''), property[1])
 
+                        } else if ( property[0] == "reference" ) {
+
+                            //property[1] must be a state
+                            property[1].set( element )
+
                         }
 
                         else if (property[0] != "child" && property[0] != "children" && !property[0].startsWith('on') && property[0] != "style") {
@@ -513,11 +518,6 @@ export class OmegaWebDriver {
                                 }
 
                             }
-
-                        } else if ( property[0] == "reference" ) {
-
-                            //property[1] must be a state
-                            property[1].set( element )
 
                         }
 
