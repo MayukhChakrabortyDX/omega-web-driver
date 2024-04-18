@@ -317,7 +317,7 @@ export class OmegaWebDriver {
             Object.entries(component.properties)
                 .forEach(property => {
 
-                    if (property[1] != "__omega__ignore__property__") {
+                    if (property[1] != "__omega__ignore__property__" && property[0] != "create" && property[0] != "destroy") {
 
                         if (property[0] == "style") {
 
@@ -558,6 +558,14 @@ export class OmegaWebDriver {
 
     }
 
+    __call_lifecycle_methods(component: OmegaComponent) {
+        if ( component.properties != undefined ) {
+            if ( component.properties.create != undefined ) {
+                component.properties.create()
+            }
+        }
+    }
+
     __component_builder(component: OmegaComponent) {
 
         let element: HTMLElement
@@ -587,6 +595,7 @@ export class OmegaWebDriver {
 
                 this.__handle_component_children(element, component)
                 this.__handle_component_property(element, component)
+                this.__call_lifecycle_methods(component)
 
                 return element
 
@@ -597,6 +606,7 @@ export class OmegaWebDriver {
 
                 this.__handle_component_children(element, component)
                 this.__handle_component_property(element, component)
+                this.__call_lifecycle_methods(component)
 
                 return element
 
@@ -608,6 +618,7 @@ export class OmegaWebDriver {
 
                 this.__handle_component_property(element, component)
                 this.__handle_component_children(element, component)
+                this.__call_lifecycle_methods(component)
 
                 return element
 
@@ -619,6 +630,7 @@ export class OmegaWebDriver {
 
                 this.__handle_component_property(element, component)
                 this.__handle_component_children(element, component)
+                this.__call_lifecycle_methods(component)
 
                 return element
 
@@ -628,6 +640,7 @@ export class OmegaWebDriver {
                 element = document.createElement("input")
 
                 this.__handle_component_property(element, component)
+                this.__call_lifecycle_methods(component)
 
                 element.setAttribute('type', 'text')
 
@@ -637,6 +650,7 @@ export class OmegaWebDriver {
                 element = document.createElement("textarea")
 
                 this.__handle_component_property(element, component)
+                this.__call_lifecycle_methods(component)
 
                 return element
 
@@ -645,6 +659,7 @@ export class OmegaWebDriver {
 
                 this.__handle_component_property(element, component)
                 this.__handle_component_children(element, component)
+                this.__call_lifecycle_methods(component)
 
                 return element
 
@@ -653,6 +668,7 @@ export class OmegaWebDriver {
 
                 this.__handle_component_property(element, component)
                 this.__handle_component_children(element, component)
+                this.__call_lifecycle_methods(component)
 
                 return element
 
@@ -660,6 +676,7 @@ export class OmegaWebDriver {
                 element = document.createElement('input')
 
                 this.__handle_component_property(element, component)
+                this.__call_lifecycle_methods(component)
 
                 element.setAttribute('type', 'number')
 
@@ -669,6 +686,7 @@ export class OmegaWebDriver {
                 element = document.createElement('input')
 
                 this.__handle_component_property(element, component)
+                this.__call_lifecycle_methods(component)
 
                 element.setAttribute('type', 'email')
 
@@ -678,6 +696,7 @@ export class OmegaWebDriver {
                 element = document.createElement('input')
 
                 this.__handle_component_property(element, component)
+                this.__call_lifecycle_methods(component)
 
                 element.setAttribute('type', 'password')
 
@@ -687,6 +706,7 @@ export class OmegaWebDriver {
                 element = document.createElement('input')
 
                 this.__handle_component_property(element, component)
+                this.__call_lifecycle_methods(component)
 
                 element.setAttribute('type', 'file')
 
@@ -696,6 +716,7 @@ export class OmegaWebDriver {
                 element = document.createElement('input')
 
                 this.__handle_component_property(element, component)
+                this.__call_lifecycle_methods(component)
 
                 element.setAttribute('type', 'checkbox')
 
@@ -706,6 +727,7 @@ export class OmegaWebDriver {
 
                 this.__handle_component_property(element, component)
                 this.__handle_component_children(element, component)
+                this.__call_lifecycle_methods(component)
 
                 return element
 
@@ -714,6 +736,7 @@ export class OmegaWebDriver {
 
                 this.__handle_component_property(element, component)
                 this.__handle_component_children(element, component)
+                this.__call_lifecycle_methods(component)
 
                 return element
 
@@ -721,6 +744,7 @@ export class OmegaWebDriver {
                 element = document.createElement('input')
 
                 this.__handle_component_property(element, component)
+                this.__call_lifecycle_methods(component)
 
                 element.setAttribute('type', 'date')
 
@@ -730,6 +754,7 @@ export class OmegaWebDriver {
                 element = document.createElement('input')
 
                 this.__handle_component_property(element, component)
+                this.__call_lifecycle_methods(component)
 
                 element.setAttribute('type', 'time')
 
@@ -740,6 +765,7 @@ export class OmegaWebDriver {
                 element = document.createElement('input')
 
                 this.__handle_component_property(element, component)
+                this.__call_lifecycle_methods(component)
 
                 element.setAttribute('type', 'datetime-local')
 
@@ -749,6 +775,7 @@ export class OmegaWebDriver {
                 element = document.createElement('input')
 
                 this.__handle_component_property(element, component)
+                this.__call_lifecycle_methods(component)
 
                 element.setAttribute('type', 'color')
 
@@ -767,6 +794,7 @@ export class OmegaWebDriver {
 
                 this.__handle_component_property(element, component)
                 this.__handle_component_children(element, component)
+                this.__call_lifecycle_methods(component)
 
                 return element
 
@@ -775,6 +803,7 @@ export class OmegaWebDriver {
 
                 this.__handle_component_property(element, component)
                 this.__handle_component_children(element, component)
+                this.__call_lifecycle_methods(component)
 
                 return element
 
@@ -783,6 +812,7 @@ export class OmegaWebDriver {
 
                 this.__handle_component_property(element, component)
                 this.__handle_component_children(element, component)
+                this.__call_lifecycle_methods(component)
 
                 return element
 
@@ -790,6 +820,7 @@ export class OmegaWebDriver {
                 element = document.createElement('br')
 
                 this.__handle_component_property(element, component)
+                this.__call_lifecycle_methods(component)
 
                 return element
 
@@ -797,6 +828,7 @@ export class OmegaWebDriver {
                 element = document.createElement('hr')
 
                 this.__handle_component_property(element, component)
+                this.__call_lifecycle_methods(component)
 
                 return element
 
@@ -806,6 +838,7 @@ export class OmegaWebDriver {
 
                 this.__handle_component_property(element, component)
                 this.__handle_component_children(element, component)
+                this.__call_lifecycle_methods(component)
 
                 return element
 
@@ -814,6 +847,7 @@ export class OmegaWebDriver {
 
                 this.__handle_component_property(element, component)
                 this.__handle_component_children(element, component)
+                this.__call_lifecycle_methods(component)
 
                 return element
 
@@ -822,6 +856,7 @@ export class OmegaWebDriver {
 
                 this.__handle_component_property(element, component)
                 this.__handle_component_children(element, component)
+                this.__call_lifecycle_methods(component)
 
                 return element
 
@@ -830,6 +865,7 @@ export class OmegaWebDriver {
 
                 this.__handle_component_property(element, component)
                 this.__handle_component_children(element, component)
+                this.__call_lifecycle_methods(component)
 
                 return element
 
@@ -838,6 +874,7 @@ export class OmegaWebDriver {
 
                 this.__handle_component_property(element, component)
                 this.__handle_component_children(element, component)
+                this.__call_lifecycle_methods(component)
 
                 return element
 
@@ -845,6 +882,7 @@ export class OmegaWebDriver {
                 element = document.createElement('source')
 
                 this.__handle_component_property(element, component)
+                this.__call_lifecycle_methods(component)
 
                 return element
 
