@@ -27,6 +27,7 @@ export class OmegaWebDriver {
             //meaning the main node of comparison is already not in our scope of update
             const newNode = this.__component_builder(newTree)
             node.replaceWith(newNode)
+
             return newNode
 
         }
@@ -158,6 +159,7 @@ export class OmegaWebDriver {
             //boils down to this
             const newNode = this.__component_builder(newTree)
             node.replaceWith(newNode)
+
             return newNode
 
         }
@@ -195,7 +197,6 @@ export class OmegaWebDriver {
 
             } else if (preTree.properties.child != undefined && newTree.properties.child == undefined) {
 
-                //in that case, we need to just remove the child
                 node.childNodes[0].remove()
 
             }
@@ -221,11 +222,15 @@ export class OmegaWebDriver {
             } else if (preTree.properties.children != undefined && newTree.properties.children == undefined) {
 
                 //just remove those children
-                node.childNodes.forEach(child => child.remove())
+                node.childNodes.forEach((child, index) => {
+
+                    child.remove()
+
+                })
 
             } else if (preTree.properties.children != undefined && newTree.properties.children != undefined) {
 
-                //compare from the new tree once, then the pre tree giving us a 2n advantage overall
+                //compare from the new tree once, then the pre tree giving us a O(2n) advantage overall
                 newTree.properties.children.forEach((child, index) => {
 
                     if (preTree.properties.children[index] != undefined) {
@@ -247,7 +252,6 @@ export class OmegaWebDriver {
                 preTree.properties.children.forEach((child, index) => {
 
                     if (newTree.properties.children[index] == undefined) {
-
                         //remove those children
                         node.childNodes[index].remove()
 
@@ -264,6 +268,7 @@ export class OmegaWebDriver {
             //good as node replacement.
             const newNode = this.__component_builder(newTree)
             node.replaceWith(newNode)
+
             return newNode
 
         } else if (preTree.properties == undefined && newTree.properties != undefined) {
@@ -296,7 +301,7 @@ export class OmegaWebDriver {
 
         component.dynamic.states.forEach(state => {
 
-            state.onchange(() => {
+            state.listen(() => {
 
                 const newTree = component.dynamic.callback() //get the new tree
                 node = this.__dynamic_tree_builder(initTree, newTree, node)
@@ -317,7 +322,14 @@ export class OmegaWebDriver {
             Object.entries(component.properties)
                 .forEach(property => {
 
-                    if (property[1] != "__omega__ignore__property__" && property[0] != "create" && property[0] != "destroy") {
+                    if ( property[1] == "create" || property[1] == "destory" ) {
+
+                        console.warn('Web driver as of now does not support create and destroy directives')
+                        console.warn('They will soon be supported.')
+
+                    }
+
+                    else if (property[1] != "__omega__ignore__property__") {
 
                         if (property[0] == "style") {
 
@@ -344,7 +356,7 @@ export class OmegaWebDriver {
 
                                             dynamicProperty.dynamic.states.forEach(state => {
 
-                                                state.onchange(() => {
+                                                state.listen(() => {
 
                                                     const newProp = dynamicProperty.dynamic.callback()
                                                     if (newProp != track) {
@@ -370,7 +382,7 @@ export class OmegaWebDriver {
 
                                     property[1].dynamic.states.forEach(state => {
 
-                                        state.onchange(() => {
+                                        state.listen(() => {
 
                                             let newTrack = property[1].dynamic.callback()
                                             const styleMap = new Map(
@@ -438,7 +450,7 @@ export class OmegaWebDriver {
 
                                             dynamicProperty.dynamic.states.forEach(state => {
 
-                                                state.onchange(() => {
+                                                state.listen(() => {
 
                                                     const newProp = dynamicProperty.dynamic.callback()
                                                     if (newProp != track) {
@@ -472,10 +484,10 @@ export class OmegaWebDriver {
 
                             element.addEventListener(property[0].replace('on', ''), property[1])
 
-                        } else if ( property[0] == "reference" ) {
+                        } else if (property[0] == "reference") {
 
                             //property[1] must be a state
-                            property[1].set( element )
+                            property[1].set(element)
 
                         }
 
@@ -495,7 +507,7 @@ export class OmegaWebDriver {
 
                                 dynamicProperty.dynamic.states.forEach(state => {
 
-                                    state.onchange(() => {
+                                    state.listen(() => {
 
                                         const newProp = dynamicProperty.dynamic.callback()
                                         if (newProp !== track) {
@@ -558,14 +570,6 @@ export class OmegaWebDriver {
 
     }
 
-    __call_lifecycle_methods(component: OmegaComponent) {
-        if ( component.properties != undefined ) {
-            if ( component.properties.create != undefined ) {
-                component.properties.create()
-            }
-        }
-    }
-
     __component_builder(component: OmegaComponent) {
 
         let element: HTMLElement
@@ -595,7 +599,6 @@ export class OmegaWebDriver {
 
                 this.__handle_component_children(element, component)
                 this.__handle_component_property(element, component)
-                this.__call_lifecycle_methods(component)
 
                 return element
 
@@ -606,7 +609,6 @@ export class OmegaWebDriver {
 
                 this.__handle_component_children(element, component)
                 this.__handle_component_property(element, component)
-                this.__call_lifecycle_methods(component)
 
                 return element
 
@@ -618,8 +620,7 @@ export class OmegaWebDriver {
 
                 this.__handle_component_property(element, component)
                 this.__handle_component_children(element, component)
-                this.__call_lifecycle_methods(component)
-
+               
                 return element
 
             case NativeComponentIndex.ColumnView:
@@ -630,8 +631,7 @@ export class OmegaWebDriver {
 
                 this.__handle_component_property(element, component)
                 this.__handle_component_children(element, component)
-                this.__call_lifecycle_methods(component)
-
+            
                 return element
 
 
@@ -640,8 +640,7 @@ export class OmegaWebDriver {
                 element = document.createElement("input")
 
                 this.__handle_component_property(element, component)
-                this.__call_lifecycle_methods(component)
-
+               
                 element.setAttribute('type', 'text')
 
                 return element
@@ -650,8 +649,7 @@ export class OmegaWebDriver {
                 element = document.createElement("textarea")
 
                 this.__handle_component_property(element, component)
-                this.__call_lifecycle_methods(component)
-
+               
                 return element
 
             case NativeComponentIndex.Link:
@@ -659,8 +657,7 @@ export class OmegaWebDriver {
 
                 this.__handle_component_property(element, component)
                 this.__handle_component_children(element, component)
-                this.__call_lifecycle_methods(component)
-
+               
                 return element
 
             case NativeComponentIndex.Button:
@@ -668,16 +665,14 @@ export class OmegaWebDriver {
 
                 this.__handle_component_property(element, component)
                 this.__handle_component_children(element, component)
-                this.__call_lifecycle_methods(component)
-
+               
                 return element
 
             case NativeComponentIndex.NumberInput:
                 element = document.createElement('input')
 
                 this.__handle_component_property(element, component)
-                this.__call_lifecycle_methods(component)
-
+               
                 element.setAttribute('type', 'number')
 
                 return element
@@ -686,8 +681,7 @@ export class OmegaWebDriver {
                 element = document.createElement('input')
 
                 this.__handle_component_property(element, component)
-                this.__call_lifecycle_methods(component)
-
+               
                 element.setAttribute('type', 'email')
 
                 return element
@@ -696,8 +690,7 @@ export class OmegaWebDriver {
                 element = document.createElement('input')
 
                 this.__handle_component_property(element, component)
-                this.__call_lifecycle_methods(component)
-
+               
                 element.setAttribute('type', 'password')
 
                 return element
@@ -706,8 +699,7 @@ export class OmegaWebDriver {
                 element = document.createElement('input')
 
                 this.__handle_component_property(element, component)
-                this.__call_lifecycle_methods(component)
-
+               
                 element.setAttribute('type', 'file')
 
                 return element
@@ -716,8 +708,7 @@ export class OmegaWebDriver {
                 element = document.createElement('input')
 
                 this.__handle_component_property(element, component)
-                this.__call_lifecycle_methods(component)
-
+               
                 element.setAttribute('type', 'checkbox')
 
                 return element
@@ -727,8 +718,7 @@ export class OmegaWebDriver {
 
                 this.__handle_component_property(element, component)
                 this.__handle_component_children(element, component)
-                this.__call_lifecycle_methods(component)
-
+               
                 return element
 
             case NativeComponentIndex.DropdownItem:
@@ -736,16 +726,14 @@ export class OmegaWebDriver {
 
                 this.__handle_component_property(element, component)
                 this.__handle_component_children(element, component)
-                this.__call_lifecycle_methods(component)
-
+               
                 return element
 
             case NativeComponentIndex.Date:
                 element = document.createElement('input')
 
                 this.__handle_component_property(element, component)
-                this.__call_lifecycle_methods(component)
-
+               
                 element.setAttribute('type', 'date')
 
                 return element
@@ -754,8 +742,7 @@ export class OmegaWebDriver {
                 element = document.createElement('input')
 
                 this.__handle_component_property(element, component)
-                this.__call_lifecycle_methods(component)
-
+               
                 element.setAttribute('type', 'time')
 
                 return element
@@ -765,8 +752,7 @@ export class OmegaWebDriver {
                 element = document.createElement('input')
 
                 this.__handle_component_property(element, component)
-                this.__call_lifecycle_methods(component)
-
+               
                 element.setAttribute('type', 'datetime-local')
 
                 return element
@@ -775,8 +761,7 @@ export class OmegaWebDriver {
                 element = document.createElement('input')
 
                 this.__handle_component_property(element, component)
-                this.__call_lifecycle_methods(component)
-
+               
                 element.setAttribute('type', 'color')
 
                 return element
@@ -794,8 +779,7 @@ export class OmegaWebDriver {
 
                 this.__handle_component_property(element, component)
                 this.__handle_component_children(element, component)
-                this.__call_lifecycle_methods(component)
-
+               
                 return element
 
             case NativeComponentIndex.TextBox:
@@ -803,8 +787,7 @@ export class OmegaWebDriver {
 
                 this.__handle_component_property(element, component)
                 this.__handle_component_children(element, component)
-                this.__call_lifecycle_methods(component)
-
+               
                 return element
 
             case NativeComponentIndex.Label:
@@ -812,24 +795,21 @@ export class OmegaWebDriver {
 
                 this.__handle_component_property(element, component)
                 this.__handle_component_children(element, component)
-                this.__call_lifecycle_methods(component)
-
+               
                 return element
 
             case NativeComponentIndex.BreakLine:
                 element = document.createElement('br')
 
                 this.__handle_component_property(element, component)
-                this.__call_lifecycle_methods(component)
-
+               
                 return element
 
             case NativeComponentIndex.HorizontalRule:
                 element = document.createElement('hr')
 
                 this.__handle_component_property(element, component)
-                this.__call_lifecycle_methods(component)
-
+               
                 return element
 
             //media elements
@@ -838,8 +818,7 @@ export class OmegaWebDriver {
 
                 this.__handle_component_property(element, component)
                 this.__handle_component_children(element, component)
-                this.__call_lifecycle_methods(component)
-
+               
                 return element
 
             case NativeComponentIndex.Video:
@@ -847,8 +826,7 @@ export class OmegaWebDriver {
 
                 this.__handle_component_property(element, component)
                 this.__handle_component_children(element, component)
-                this.__call_lifecycle_methods(component)
-
+               
                 return element
 
             case NativeComponentIndex.Image:
@@ -856,8 +834,7 @@ export class OmegaWebDriver {
 
                 this.__handle_component_property(element, component)
                 this.__handle_component_children(element, component)
-                this.__call_lifecycle_methods(component)
-
+            
                 return element
 
             case NativeComponentIndex.IFrame:
@@ -865,8 +842,7 @@ export class OmegaWebDriver {
 
                 this.__handle_component_property(element, component)
                 this.__handle_component_children(element, component)
-                this.__call_lifecycle_methods(component)
-
+               
                 return element
 
             case NativeComponentIndex.MultiMedia:
@@ -874,16 +850,14 @@ export class OmegaWebDriver {
 
                 this.__handle_component_property(element, component)
                 this.__handle_component_children(element, component)
-                this.__call_lifecycle_methods(component)
-
+               
                 return element
 
             case NativeComponentIndex.MediaSource:
                 element = document.createElement('source')
 
                 this.__handle_component_property(element, component)
-                this.__call_lifecycle_methods(component)
-
+               
                 return element
 
             default:
