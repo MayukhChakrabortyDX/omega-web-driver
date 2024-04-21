@@ -296,14 +296,14 @@ export class OmegaWebDriver {
         //these are the trackers that helps in building the foundations. Trackers are comments hence are very
         //well optimized for browser usage
 
-        let initTree = component.dynamic.callback()
+        let initTree = component.dynamic.callback( component.dynamic.scope )
         let node = this.__component_builder(initTree)
 
         component.dynamic.states.forEach(state => {
 
             state.listen(() => {
 
-                const newTree = component.dynamic.callback() //get the new tree
+                const newTree = component.dynamic.callback( component.dynamic.scope ) //get the new tree
                 node = this.__dynamic_tree_builder(initTree, newTree, node)
                 initTree = newTree
 
@@ -338,7 +338,7 @@ export class OmegaWebDriver {
                                 if (property[1].name != undefined) {
 
                                     //meaning it itself is a dynamic stateful property
-                                    let track = property[1].dynamic.callback()
+                                    let track = property[1].dynamic.callback( property[1].dynamic.scope )
                                     //now we will actually optimize this one. Using what we call maps.
                                     //track has bunch of properties we need to compare.
                                     Object.entries(track).forEach(style => {
@@ -348,7 +348,7 @@ export class OmegaWebDriver {
                                             //@ts-ignore                                        
                                             const dynamicProperty: Dynamic<string> = style[1]
 
-                                            let track = dynamicProperty.dynamic.callback()
+                                            let track = dynamicProperty.dynamic.callback( dynamicProperty.dynamic.scope )
 
                                             if (track != "__omega__ignore__property__") {
                                                 element.style[style[0]] = track
@@ -358,7 +358,7 @@ export class OmegaWebDriver {
 
                                                 state.listen(() => {
 
-                                                    const newProp = dynamicProperty.dynamic.callback()
+                                                    const newProp = dynamicProperty.dynamic.callback( dynamicProperty.dynamic.scope )
                                                     if (newProp != track) {
 
                                                         element.style[style[0]] = newProp
@@ -384,7 +384,7 @@ export class OmegaWebDriver {
 
                                         state.listen(() => {
 
-                                            let newTrack = property[1].dynamic.callback()
+                                            let newTrack = property[1].dynamic.callback( property[1].dynamic.scope )
                                             const styleMap = new Map(
                                                 Object.keys(track).map(v => [v, false]) //assume false
                                             )
@@ -442,7 +442,7 @@ export class OmegaWebDriver {
                                             //@ts-ignore                                        
                                             const dynamicProperty: Dynamic<string> = style[1]
 
-                                            let track = dynamicProperty.dynamic.callback()
+                                            let track = dynamicProperty.dynamic.callback( dynamicProperty.dynamic.scope )
 
                                             if (track != "__omega__ignore__property__") {
                                                 element.style[style[0]] = track
@@ -452,7 +452,7 @@ export class OmegaWebDriver {
 
                                                 state.listen(() => {
 
-                                                    const newProp = dynamicProperty.dynamic.callback()
+                                                    const newProp = dynamicProperty.dynamic.callback( dynamicProperty.dynamic.scope )
                                                     if (newProp != track) {
 
                                                         element.style[style[0]] = newProp
@@ -498,7 +498,7 @@ export class OmegaWebDriver {
                                 //it must be a dynamic one.
                                 const dynamicProperty: Dynamic<string> = property[1]
 
-                                let track = dynamicProperty.dynamic.callback()
+                                let track = dynamicProperty.dynamic.callback( dynamicProperty.dynamic.scope )
 
                                 if (track != "__omega__ignore__property__") {
                                     element[property[0]] = track
@@ -509,7 +509,7 @@ export class OmegaWebDriver {
 
                                     state.listen(() => {
 
-                                        const newProp = dynamicProperty.dynamic.callback()
+                                        const newProp = dynamicProperty.dynamic.callback( dynamicProperty.dynamic.scope )
                                         if (newProp !== track) {
 
                                             element[property[0]] = newProp
